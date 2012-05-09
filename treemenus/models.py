@@ -2,7 +2,6 @@ from itertools import chain
 
 from django.db import models
 from django.utils.translation import ugettext_lazy
-from django.utils.translation import ugettext as _
 
 
 class MenuItem(models.Model):
@@ -106,7 +105,7 @@ class Menu(models.Model):
     def save(self, force_insert=False, **kwargs):
         if not self.root_item:
             root_item = MenuItem()
-            root_item.caption = _('root')
+            root_item.caption = ugettext_lazy('root').encode('utf-8')
             if not self.pk:  # If creating a new object (i.e does not have a pk yet)
                 super(Menu, self).save(force_insert, **kwargs)  # Save, so that it gets a pk
                 force_insert = False
@@ -124,5 +123,5 @@ class Menu(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = _('menu')
-        verbose_name_plural = _('menus')
+        verbose_name = ugettext_lazy('menu')
+        verbose_name_plural = ugettext_lazy('menus')
