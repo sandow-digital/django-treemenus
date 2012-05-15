@@ -21,12 +21,15 @@ def get_treemenus_static_prefix():
 
 
 def show_menu(context, menu_name, menu_type=None):
-    menu = Menu.objects.get(name=menu_name)
-    context['menu'] = menu
-    context['menu_name'] = menu_name
-    if menu_type:
-        context['menu_type'] = menu_type
-    return context
+    try:
+        menu = Menu.objects.get(name=menu_name)
+        context['menu'] = menu
+        context['menu_name'] = menu_name
+        if menu_type:
+            context['menu_type'] = menu_type
+        return context
+    except Menu.DoesNotExist:
+        return
 register.inclusion_tag('%s/menu.html' % APP_LABEL, takes_context=True)(show_menu)
 
 
