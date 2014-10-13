@@ -50,8 +50,16 @@ class ReverseNamedURLNode(Node):
     def render(self, context):
         from django.template import TOKEN_BLOCK, Token
 
-        resolved_named_url = self.named_url.resolve(context)
-        contents = u'url ' + resolved_named_url
+        if django.VERSION >= (1, 3):
+            tokens = resolved_named_url.split(' ')
+            base = tokens[0]
+            args = tokens[1:]
+            contents = u'url "{0}" {1}'.format(base, ' '.join(args))
+        else:
+            contents = u'url {0}'.format(resolved_named_url)
+
+#        resolved_named_url = self.named_url.resolve(context)
+#        contents = u'url ' + resolved_named_url
 
         urlNode = url(self.parser, Token(token_type=TOKEN_BLOCK, contents=contents))
         return urlNode.render(context)
